@@ -16,6 +16,8 @@
 # MAGIC - saves the directory HTML as a raw artifact
 # MAGIC - keeps an audit manifest in the Volume
 # MAGIC
+# MAGIC **Prerequisites:** Run [00_UC_Schemas_and_Volumes_Setup](#notebook-2668398073890001) first to create the UC infrastructure.
+# MAGIC
 # MAGIC When this notebook is run as a Job, pass `bls_contact_email` as a notebook parameter.
 
 # COMMAND ----------
@@ -32,22 +34,17 @@ print(f"bls_contact_email: {bls_contact_email}")
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 🏗️ 2. Create medallion UC schemas and raw Volume
+# MAGIC ## ℹ️ Prerequisites
 # MAGIC
-# MAGIC These statements are idempotent, so re-running the notebook is safe.
-
-# COMMAND ----------
-
-spark.sql("CREATE CATALOG IF NOT EXISTS rearc")
-spark.sql("CREATE SCHEMA IF NOT EXISTS rearc.bronze")
-spark.sql("CREATE SCHEMA IF NOT EXISTS rearc.silver")
-spark.sql("CREATE SCHEMA IF NOT EXISTS rearc.gold")
-spark.sql("CREATE VOLUME IF NOT EXISTS rearc.bronze.raw_source_data")
+# MAGIC **Before running this notebook**, ensure the Unity Catalog infrastructure exists by running:
+# MAGIC [00_UC_Schemas_and_Volumes_Setup](#notebook-2668398073890001)
+# MAGIC
+# MAGIC This creates the `rearc` catalog, medallion schemas, and the raw data volume.
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## ⚙️ 3. Configuration
+# MAGIC ## ⚙️ 2. Configuration
 
 # COMMAND ----------
 
@@ -95,7 +92,7 @@ MANIFEST_PATH.parent.mkdir(parents=True, exist_ok=True)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 🛠️ 4. Define helper functions
+# MAGIC ## 🛠️ 3. Define helper functions
 
 # COMMAND ----------
 
@@ -163,7 +160,7 @@ def discover_files(directory_html):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 📂 5. Load previous manifest
+# MAGIC ## 📂 4. Load previous manifest
 
 # COMMAND ----------
 
@@ -183,7 +180,7 @@ else:
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 🔍 6. Discover current BLS directory state
+# MAGIC ## 🔍 5. Discover current BLS directory state
 
 # COMMAND ----------
 
@@ -216,7 +213,7 @@ print(f"discovered_files: {discovered_files}")
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## ⬇️ 7. Download only new or changed files
+# MAGIC ## ⬇️ 6. Download only new or changed files
 
 # COMMAND ----------
 
@@ -297,7 +294,7 @@ for file_name, source_metadata in sorted(discovered_files.items()):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 🗑️ 8. Remove files that disappeared upstream
+# MAGIC ## 🗑️ 7. Remove files that disappeared upstream
 
 # COMMAND ----------
 
@@ -332,7 +329,7 @@ for file_name in sorted(removed_file_names):
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 💾 9. Save the raw directory HTML only when it changes
+# MAGIC ## 💾 8. Save the raw directory HTML only when it changes
 
 # COMMAND ----------
 
@@ -354,7 +351,7 @@ save_json(MANIFEST_PATH, manifest)
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## 📊 10. Run summary
+# MAGIC ## 📊 9. Run summary
 
 # COMMAND ----------
 
