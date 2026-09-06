@@ -85,7 +85,6 @@ For the reasoning behind the layer boundaries, SQL vs. PySpark choices, safe re-
 │
 ├── population_and_productivity_pipeline/
 │   ├── explorations/
-│   ├── tests/
 │   ├── transformations/
 │   └── utilities/
 │
