@@ -19,7 +19,6 @@ CREATE TEMPORARY VIEW bls_series_yearly_values_q2_sql (
         ON VIOLATION FAIL UPDATE,
     CONSTRAINT complete_quarters_or_annual_only
         EXPECT (_complete_quarters_or_annual_only)
-        ON VIOLATION FAIL UPDATE
 )
 COMMENT "Validated SQL yearly BLS values for analytical question 2."
 AS
