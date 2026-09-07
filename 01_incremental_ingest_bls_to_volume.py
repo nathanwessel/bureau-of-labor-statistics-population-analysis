@@ -17,19 +17,19 @@
 # MAGIC - keeps an audit manifest in the Volume
 # MAGIC
 # MAGIC **Prerequisites:** Run [00_UC_Schemas_and_Volumes_Setup](#notebook-2668398073890001) first to create the UC infrastructure.
-# MAGIC
-# MAGIC When this notebook is run as a Job, pass `bls_contact_email` as a notebook parameter.
 
 # COMMAND ----------
 
 # MAGIC %md
-# MAGIC ## ⚙️ 1. Parameter
+# MAGIC ## ⚙️ 1. Fetch BLS contact email from Unity Catalog secrets
 
 # COMMAND ----------
 
-dbutils.widgets.text("bls_contact_email", "")
-bls_contact_email = dbutils.widgets.get("bls_contact_email").strip()
-print(f"bls_contact_email: {bls_contact_email}")
+bls_contact_email = dbutils.secrets.get(
+    catalog="rearc",
+    schema="secrets",
+    key="bls_contact_email",
+)
 
 # COMMAND ----------
 
@@ -356,12 +356,3 @@ save_json(MANIFEST_PATH, manifest)
 # COMMAND ----------
 
 print(json.dumps(run_summary, indent=2))
-
-# A healthy second run with no BLS changes should show:
-# {
-#   "new": 0,
-#   "changed": 0,
-#   "unchanged": <all current files>,
-#   "removed": 0,
-#   "downloads": 0
-# }

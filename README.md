@@ -46,7 +46,7 @@ Productivity time-series data is retrieved from the BLS public `pr` dataset:
 
 The ingestion code dynamically discovers the supported source files in the BLS productivity directory and lands them in the Unity Catalog Volume for downstream processing.
 
-Before running BLS ingestion, configure the **contact-email widget** with the requester's email address, as requested by the BLS automated data retrieval guidance.
+The BLS contact email is stored as a **Unity Catalog secret** (`catalog="rearc"`, `schema="secrets"`, `key="bls_contact_email"`), accessed by the `00_UC_Schemas_and_Volumes_Setup` notebook.
 
 ## Technology
 
@@ -133,7 +133,7 @@ This creates the Unity Catalog schemas and Volume locations used by the project.
 
 ### 3. Configure the BLS contact email
 
-Before running BLS ingestion, set the contact-email widget in the BLS ingestion notebook to an email address appropriate for the person making the automated request.
+The BLS contact email is stored as a **Unity Catalog secret** (`catalog="rearc"`, `schema="secrets"`, `key="bls_contact_email"`), accessed by the `00_UC_Schemas_and_Volumes_Setup` notebook. The BLS ingestion notebook retrieves it via `dbutils.secrets.get(catalog="rearc", schema="secrets", key="bls_contact_email")`.
 
 ### 4. Land the source data
 
