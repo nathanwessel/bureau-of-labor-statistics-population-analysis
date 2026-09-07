@@ -34,6 +34,12 @@ The BLS ingestion discovers the published source files in the productivity time-
 
 I kept the corresponding Bronze and Silver structures relatively similar to the BLS source instead of combining the datasets into a highly-customized model at ingestion time.
 
+### BLS contact email
+
+BLS requests that automated data retrieval include a contact email address in the `User-Agent` header. I use a **Unity Catalog secret** so the email address is not exposed in the notebook UI or in notebook run configurations.
+
+The secret is stored at `rearc.secrets.bls_contact_email` and is accessed by the `00_UC_Schemas_and_Volumes_Setup` notebook. The BLS ingestion notebook retrieves it via `dbutils.secrets.get(catalog="rearc", schema="secrets", key="bls_contact_email")` and embeds it in the `User-Agent` header for all BLS HTTP requests.
+
 ### Population snapshots and safe reruns
 
 The population API is treated as a snapshot source.
